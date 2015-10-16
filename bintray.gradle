@@ -1,6 +1,6 @@
-group = PROJ_GROUP
-version = PROJ_VERSION
-project.archivesBaseName = PROJ_ARTIFACTID
+group = getProperty('projGroup')
+version = project.getProperty('projVersion')
+project.archivesBaseName = project.getProperty('projArtifactId')
 
 apply plugin: 'com.jfrog.bintray'
 apply plugin: "com.jfrog.artifactory"
@@ -29,7 +29,7 @@ javadoc {
         author true
         version true
         links "http://docs.oracle.com/javase/7/docs/api"
-        title PROJ_ARTIFACTID
+        title project.getProperty("projArtifactId")
     }
 }
 
@@ -37,16 +37,16 @@ javadoc {
 def pomConfig = {
     licenses {
         license {
-            name "The Apache Software License, Version 2.0"
-            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            name "MIT License"
+            url "http://www.opensource.org/licenses/mit-license.php"
             distribution "repo"
         }
     }
     developers {
         developer {
-            id DEVELOPER_ID
-            name DEVELOPER_NAME
-            email DEVELOPER_EMAIL
+            id project.getProperty("developerId")
+            name project.getProperty("developerName")
+            email project.getProperty("developerEmail")
         }
     }
 }
@@ -54,7 +54,7 @@ def pomConfig = {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId PROJ_ARTIFACTID
+            artifactId project.getProperty('projArtifactId')
             artifact javadocJar
             artifact sourcesJar
 
@@ -63,7 +63,7 @@ publishing {
             }
             pom.withXml {
                 def root = asNode()
-                root.appendNode('description', PROJ_DESCRIPTION)
+                root.appendNode('description', project.getProperty("projDescription"))
                 root.children().last() + pomConfig
             }
         }
@@ -83,12 +83,12 @@ bintray {
 
     pkg {
         repo = 'maven'
-        name = PROJ_NAME
-        desc = PROJ_DESCRIPTION
-        websiteUrl = PROJ_WEBSITEURL
-        issueTrackerUrl = PROJ_ISSUETRACKERURL
-        vcsUrl = PROJ_VCSURL
-        licenses = ['Apache-2.0']
+        name = project.getProperty('projName')
+        desc = project.getProperty('projDescription')
+        websiteUrl = project.getProperty('projWebsiteurl')
+        issueTrackerUrl = project.getProperty('projIssuetrackerurl')
+        vcsUrl = project.getProperty('projVcsurl')
+        licenses = ["MIT"]
         publicDownloadNumbers = true
     }
 }
